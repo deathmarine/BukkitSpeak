@@ -1,0 +1,11 @@
+name: BukkitSpeak
+main: com.modcrafting.bukkitspeak.BukkitSpeak
+version: 0.0.2
+website: http://modcrafting.com
+author: Deathmarine
+description: >
+             Team Speak Plugin for Bukkit.
+commands:
+  ts:
+    description: Command Access
+    usage: /<command> 

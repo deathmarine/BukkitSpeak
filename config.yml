@@ -1,0 +1,4 @@
+Host: 'localhost'
+ServerAdminUsername: 'serveradmin'
+ServerAdminPassword: 'password'
+DisplayName: 'MinecraftServer'

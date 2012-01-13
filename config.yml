@@ -1,4 +1,11 @@
+#Host IP#
 Host: 'localhost'
+#Query/Server Port#
+#Will detect which virtual server your using via the port#
+ServerPort: 9987
+QueryPort: 10011
+#Query Username/Password#
 ServerAdminUsername: 'serveradmin'
 ServerAdminPassword: 'password'
-DisplayName: 'MinecraftServer'
+#Name to display in messages from minecraft in teamspeak#
+DisplayName: 'MC'

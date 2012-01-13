@@ -1,0 +1,11 @@
+ts:
+    list:
+        clients:
+        channels:
+        logview:
+        serverinfo:
+        groups:
+    ban:
+    kick:
+    help:
+    group:

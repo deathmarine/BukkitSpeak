@@ -22,10 +22,12 @@ public class BukkitSpeak extends JavaPlugin{
 
 	private final Playerlistener playerListener = new Playerlistener(this);
 	private final TSListener tslistener = new TSListener(this);
-	public JTS3ServerQuery query = new JTS3ServerQuery();
 	public HashSet<String> loggedPlayers = new HashSet<String>();
+	public JTS3ServerQuery query = new JTS3ServerQuery();
+	public DTS3ServerQuery dquery = new DTS3ServerQuery(this);
 	public final static Logger log = Logger.getLogger("Minecraft");
 	public String maindir = "plugins/BukkitSpeak/";
+	public int channel;
 	protected void createDefaultConfiguration(String name) {
 		File actual = new File(getDataFolder(), name);
 		if (!actual.exists()) {
@@ -72,14 +74,24 @@ public class BukkitSpeak extends JavaPlugin{
 		YamlConfiguration config = (YamlConfiguration) this.getConfig();
 		PluginDescriptionFile pdfFile = this.getDescription();
 		new File(maindir).mkdir();
-		createDefaultConfiguration("config.yml"); //Swap for new setup
+		createDefaultConfiguration("config.yml");
+		String channelName = config.getString("channel", "default");
+		if(channelName.equalsIgnoreCase("default")){
+			channel = JTS3ServerQuery.TEXTMESSAGE_TARGET_GLOBAL;
+		}else{
+			channel = Integer.parseInt(dquery.channelFind(channelName));
+		}
+		//Swap for new setup
 		loadCommands();
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Low, this);
-		pm.registerEvent(Event.Type.PLAYER_LOGIN, playerListener, Priority.Monitor, this);
+		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		String host = config.getString("Host","localhost");
-		if (!query.connectTS3Query(host , 10011)){
+		int vport = config.getInt("ServerPort", 9987);
+		int port = config.getInt("QueryPort",10011);
+		//String chID = config.getString("Channel", "default");
+		if (!query.connectTS3Query(host , port)){
 			log.log(Level.INFO, "[" + pdfFile.getName() + "]" + " is unable to be enabled!");
 			echoError();
 			return;
@@ -89,7 +101,7 @@ public class BukkitSpeak extends JavaPlugin{
 		query.loginTS3(admin, pass);
 		log.log(Level.INFO, "[" + pdfFile.getName() + "]" + " Logging into Team Speak 3 Server!");
 		query.setTeamspeakActionListener(tslistener);
-		if (!query.selectVirtualServer(1))
+		if (!query.selectVirtualServer(vport, true))
 		{
 			echoError();
 			return;
@@ -103,6 +115,10 @@ public class BukkitSpeak extends JavaPlugin{
 			return;
 		}
 		log.log(Level.INFO, "[" + pdfFile.getName() + "]" + " is enabled!");
+		String displayName = config.getString("DisplayName", "MC");
+		if (query.setDisplayName(displayName)){
+			log.log(Level.INFO, "[" + pdfFile.getName() + "]" + " Nickname changed to " + displayName + "!");
+		}
 	}
 	void echoError(){
 		String error = query.getLastError();

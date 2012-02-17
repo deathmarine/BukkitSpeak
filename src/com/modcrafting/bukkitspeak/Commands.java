@@ -22,15 +22,20 @@ public class Commands implements CommandExecutor {
 	public Commands(BukkitSpeak bukkitSpeak) {
 		this.plugin = bukkitSpeak;
 	}
+	/*
+	 * Use this when I implement vault.
+	 * 
 	String use = "bukkitspeak.use";
 	String list = "bukkitspeak.list";
 	String listclients = "bukkitspeak.clientlist";
 	String listchannels = "bukkitspeak.channellist";
 	String listserverinfo = "bukkitspeak.serverinfo";
 	String ban = "bukkitspeak.ban";
+	String kick = "bukkitspeak.kick";
 	String ipban = "bukkitspeak.ipban";
 	String help = "bukkitspeak.help";
-	
+	String reload = "bukkitspeak.reload";
+	*/
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
@@ -40,7 +45,7 @@ public class Commands implements CommandExecutor {
 		if (sender instanceof Player){
 			player = (Player)sender;
 		/*	if (plugin.setupPermissions()){
-				if (plugin.permission.has(player, "identify.use")) auth = true;
+				if (plugin.permission.has(player, Example)) auth = true;
 			}else{ */
 				if (player.isOp()){
 				 auth = true;
@@ -50,7 +55,7 @@ public class Commands implements CommandExecutor {
 			auth = true;
 		}
 		if(!auth){
-			sender.sendMessage("No Permission");
+			sender.sendMessage(ChatColor.RED + "No Permission");
 		}
 		if(auth){
 			if (args.length < 1) return false;
@@ -135,7 +140,7 @@ public class Commands implements CommandExecutor {
 			}
 			if(args[0].equalsIgnoreCase("ban")){
 				//Permissions
-				if (args[1].length() < 0 ){
+				if (args.length < 1){
 					sender.sendMessage("/ts3 ban {clientname} (reason)");
 					return true;
 				}				
@@ -154,7 +159,7 @@ public class Commands implements CommandExecutor {
 			}
 			if(args[0].equalsIgnoreCase("kick")){
 				//Permissions
-				if (args[1].length() < 0 ){
+				if (args.length < 1){
 					sender.sendMessage("/ts3 kick {clientname} (reason)");
 					return true;
 				}				
@@ -174,20 +179,24 @@ public class Commands implements CommandExecutor {
 			}
 			if(args[0].equalsIgnoreCase("help")){
 				sender.sendMessage("[BukkitSpeak]");
-				sender.sendMessage("");
-				sender.sendMessage("");
-				sender.sendMessage("");
-				sender.sendMessage("");
+				sender.sendMessage("/ts3 list [clients/channels/logview/serverinfo/groups]");
+				sender.sendMessage("/ts3 ban {clientname} (reason)");
+				sender.sendMessage("/ts3 kick {clientname} (reason)");
+				sender.sendMessage("/ts3 channel {name}");
+				sender.sendMessage("-Changes Channels");
+				sender.sendMessage("/ts3 group {groupid} {name}");
+				sender.sendMessage("-Changes Group");
+				sender.sendMessage("/ts3 reload");
 				//Display Commands permissions
 				
 			}
 			if(args[0].equalsIgnoreCase("group")){
 				//Change player group
-				if (args[1].length() < 0 ){
+				if (args.length < 1){
 					sender.sendMessage("/ts3 group {groupid} {name}");
 					return true;
 				}
-				if (args[2].length() < 0){
+				if (args.length > 3){
 					sender.sendMessage("/ts3 group {groupid} {name}");
 					return true;					
 				}
@@ -206,7 +215,7 @@ public class Commands implements CommandExecutor {
 			}
 			/*
 			if(args[0].equalsIgnoreCase("name")){
-				if (args[1].length() < 0 ){
+				if (args.length < 1){
 					sender.sendMessage("/ts3 name {display}");
 					return true;
 				}
@@ -214,7 +223,7 @@ public class Commands implements CommandExecutor {
 			}
 			*/
 			if(args[0].equalsIgnoreCase("channel")){
-				if (args[1].length() < 0 ){
+				if(args.length < 1){
 					sender.sendMessage("/ts3 channel {name}");
 					return true;
 				}
@@ -222,6 +231,18 @@ public class Commands implements CommandExecutor {
 				String cid = plugin.dquery.channelFind(plugin.query.encodeTS3String(name));
 				plugin.channel = Integer.parseInt(cid);
 				return true;
+			}
+			if(args[0].equalsIgnoreCase("reload")){
+				if (args.length < 1){
+					sender.sendMessage("/ts3 reload");
+				}
+				if(plugin.query.removeAllEvents()){
+				}
+				plugin.query.removeTeamspeakActionListener();
+				plugin.query.closeTS3Connection();
+				plugin.getServer().getPluginManager().disablePlugin(plugin);
+				plugin.getServer().getPluginManager().enablePlugin(plugin);
+				sender.sendMessage("BukkitSpeak Reloaded");
 			}
 		}
 		return false;

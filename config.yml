@@ -7,5 +7,13 @@ QueryPort: 10011
 #Query Username/Password#
 ServerAdminUsername: 'serveradmin'
 ServerAdminPassword: 'password'
-#Name to display in messages from minecraft in teamspeak#
-DisplayName: 'MC'
+#Display Names#
+#DisplayName for TS in Minecraft#
+TSDisplayName: 'MC'
+#DisplayName for MC in Teamspeak#
+MCDisplayName: 'TS'
+#Message format#
+#Format for Teamspeak#
+TSMessageFormat: '[%DisplayName%]<%PlayerName%>:%Message%'
+#Format for Minecraft/Colors work#
+MCMessageFormat: '[%DisplayName%]<%PlayerName%>:%Message%'

@@ -40,8 +40,16 @@ public class TSListener implements TeamspeakActionListener{
 				}
 				return;
 			}
-			if(msg.contains("!")){
-				
+			if(msg.contains("!reload")){
+				if(plugin.query.removeAllEvents()){
+				}
+				plugin.query.removeTeamspeakActionListener();
+				plugin.query.closeTS3Connection();
+				plugin.getServer().getPluginManager().disablePlugin(plugin);
+				plugin.getServer().getPluginManager().enablePlugin(plugin);
+				if (plugin.query.sendTextMessage(JTS3ServerQuery.EVENT_MODE_TEXTSERVER, JTS3ServerQuery.TEXTMESSAGE_TARGET_GLOBAL, "BukkitSpeak Reloaded")){
+		        	
+		        }
 			}
 			String name = eventInfo.remove("invokername");
 			//Setup for custom format.

@@ -83,8 +83,6 @@ public class BukkitSpeak extends JavaPlugin{
 		loadCommands();
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(playerListener, this);
-		pm.registerEvents(playerListener, this);
-		pm.registerEvents(playerListener, this);
 		String host = config.getString("Host","localhost");
 		int vport = config.getInt("ServerPort", 9987);
 		int port = config.getInt("QueryPort",10011);

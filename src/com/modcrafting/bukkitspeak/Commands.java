@@ -32,6 +32,7 @@ public class Commands implements CommandExecutor {
 	String listserverinfo = "bukkitspeak.serverinfo";
 	String ban = "bukkitspeak.ban";
 	String kick = "bukkitspeak.kick";
+	String poke = "bukkitspeak.poke";
 	String ipban = "bukkitspeak.ipban";
 	String help = "bukkitspeak.help";
 	String reload = "bukkitspeak.reload";
@@ -189,7 +190,7 @@ public class Commands implements CommandExecutor {
 					if(args.length > 3){
 						message = combineSplit(2, args, " ");						
 					}
-					int clientID = Integer.parseInt(plugin.dquery.clientFindID(name));
+					//int clientID = Integer.parseInt(plugin.dquery.clientFindID(name));
 					if (plugin.dquery.poke(name, message)){
 						sender.sendMessage(ChatColor.AQUA + name + ChatColor.DARK_AQUA + " was poked in TeamSpeak");
 						return true;
@@ -197,15 +198,16 @@ public class Commands implements CommandExecutor {
 				
 			}
 			if(args[0].equalsIgnoreCase("help")){
-				sender.sendMessage("[BukkitSpeak]");
-				sender.sendMessage("/ts list [clients/channels/logview/serverinfo/groups]");
-				sender.sendMessage("/ts ban {clientname} (reason)");
-				sender.sendMessage("/ts kick {clientname} (reason)");
-				sender.sendMessage("/ts channel {name}");
-				sender.sendMessage("-Changes Channels");
-				sender.sendMessage("/ts group {groupid} {name}");
-				sender.sendMessage("-Changes Group");
-				sender.sendMessage("/ts reload");
+				sender.sendMessage(ChatColor.DARK_GRAY + "[BukkitSpeak]");
+				sender.sendMessage(ChatColor.GRAY + "/ts list [clients/channels/poke/logview/serverinfo/groups]");
+				sender.sendMessage(ChatColor.GRAY + "/ts ban {clientname} (reason)");
+				sender.sendMessage(ChatColor.GRAY + "/ts kick {clientname} (reason)");
+				sender.sendMessage(ChatColor.GRAY + "/ts poke {clientname} (message)");
+				sender.sendMessage(ChatColor.GRAY + "/ts channel {name}");
+				sender.sendMessage(ChatColor.GRAY + "-Changes Channels");
+				sender.sendMessage(ChatColor.GRAY + "/ts group {groupid} {name}");
+				sender.sendMessage(ChatColor.GRAY + "-Changes Group");
+				sender.sendMessage(ChatColor.GRAY + "/ts reload");
 				//Display Commands permissions
 				
 			}
@@ -214,10 +216,6 @@ public class Commands implements CommandExecutor {
 				if (args.length < 1){
 					sender.sendMessage("/ts group {groupid} {name}");
 					return true;
-				}
-				if (args.length > 3){
-					sender.sendMessage("/ts group {groupid} {name}");
-					return true;					
 				}
 				String groupId = args[1];
 				String name = combineSplit(2, args, " ");
@@ -261,7 +259,7 @@ public class Commands implements CommandExecutor {
 				plugin.query.closeTS3Connection();
 				plugin.getServer().getPluginManager().disablePlugin(plugin);
 				plugin.getServer().getPluginManager().enablePlugin(plugin);
-				sender.sendMessage("BukkitSpeak Reloaded");
+				sender.sendMessage(ChatColor.GREEN + "BukkitSpeak Reloaded");
 				return true;
 			}
 		}

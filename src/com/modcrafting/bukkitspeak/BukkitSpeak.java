@@ -23,6 +23,7 @@ public class BukkitSpeak extends JavaPlugin{
 	public HashSet<String> loggedPlayers = new HashSet<String>();
 	public JTS3ServerQuery query = new JTS3ServerQuery();
 	public DTS3ServerQuery dquery = new DTS3ServerQuery(this);
+	public KeepAlive keepalive = new KeepAlive(this);
 	public final static Logger log = Logger.getLogger("Minecraft");
 	public String maindir = "plugins/BukkitSpeak/";
 	public int channel;
@@ -63,6 +64,7 @@ public class BukkitSpeak extends JavaPlugin{
 	}
 
 	public void onDisable() {
+		keepalive.kill();
 		loggedPlayers.clear();
 		query.removeTeamspeakActionListener();
 		query.closeTS3Connection();
@@ -71,15 +73,16 @@ public class BukkitSpeak extends JavaPlugin{
 	public void onEnable() {
 		YamlConfiguration config = (YamlConfiguration) this.getConfig();
 		PluginDescriptionFile pdfFile = this.getDescription();
+		//Write the default configuration stored
 		new File(maindir).mkdir();
 		createDefaultConfiguration("config.yml");
+		
 		String channelName = config.getString("channel", "default");
 		if(channelName.equalsIgnoreCase("default")){
 			channel = JTS3ServerQuery.TEXTMESSAGE_TARGET_GLOBAL;
 		}else{
 			channel = Integer.parseInt(dquery.channelFind(channelName));
 		}
-		//Swap for new setup
 		loadCommands();
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(playerListener, this);
@@ -92,10 +95,13 @@ public class BukkitSpeak extends JavaPlugin{
 			echoError();
 			return;
 		}
+		
 		String admin = config.getString("ServerAdminUsername","serveradmin");
 		String pass = config.getString("ServerAdminPassword","password");
 		query.loginTS3(admin, pass);
-		log.log(Level.INFO, "[" + pdfFile.getName() + "]" + " Logging into Team Speak 3 Server!");
+		
+		log.log(Level.INFO, "[" + pdfFile.getName() + "]" + " Logged into Team Speak 3 Server!");
+		//Register JTS3ServerQuery Listeners
 		query.setTeamspeakActionListener(tslistener);
 		if (!query.selectVirtualServer(vport, true))
 		{
@@ -110,11 +116,14 @@ public class BukkitSpeak extends JavaPlugin{
 			echoError();
 			return;
 		}
+		
 		log.log(Level.INFO, "[" + pdfFile.getName() + "]" + " is enabled!");
 		String displayName = config.getString("DisplayName", "MC");
 		if (query.setDisplayName(displayName)){
 			log.log(Level.INFO, "[" + pdfFile.getName() + "]" + " Nickname changed to " + displayName + "!");
 		}
+		//Enable the Keep Alive
+		(new Thread(this.keepalive)).start();
 	}
 	void echoError(){
 		String error = query.getLastError();

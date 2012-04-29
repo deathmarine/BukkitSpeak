@@ -158,7 +158,33 @@ public class DTS3ServerQuery{
 		return channelname;
 		
 	}
-	void outputHashMap(HashMap<String, String> hm){
+	public boolean poke(String player, String message){
+		if (!plugin.query.isConnected()){
+			log.log(Level.INFO, "channelFind(): Not connected to TS3 server!");
+			return false;
+		}
+		//clientpoke clid=5 msg=Wake\sup!
+		String clid = clientFindID(player);
+		HashMap<String, String> hmIn;
+		try{
+			String command = "clientpoke";					
+			if (player != null && message != null){
+			command += " clid=" + clid + " msg=" + plugin.query.encodeTS3String(message);
+			}
+			
+			hmIn = plugin.query.doCommand(command);
+			if (!hmIn.get("msg").equalsIgnoreCase("ok")){
+				log.log(Level.INFO, "clientfind()" + hmIn.get("id") + hmIn.get("msg") + hmIn.get("extra_msg") + hmIn.get("failed_permid"));
+				return false;
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public void outputHashMap(HashMap<String, String> hm){
 		if (hm == null)
 		{
 			return;

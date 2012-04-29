@@ -39,7 +39,7 @@ public class Commands implements CommandExecutor {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
-    	boolean auth = true;
+    	boolean auth = false;
 		Player player = null;
 		
 		if (sender instanceof Player){
@@ -115,7 +115,7 @@ public class Commands implements CommandExecutor {
 					return true;
 					}else{
 					sender.sendMessage(ChatColor.RED + "[BukkitSpeak] Not Connected");
-					sender.sendMessage(ChatColor.GREEN + "Type: /ts3 reload");
+					sender.sendMessage(ChatColor.GREEN + "Type: /ts reload");
 					return true;
 					}
 					
@@ -141,7 +141,7 @@ public class Commands implements CommandExecutor {
 			if(args[0].equalsIgnoreCase("ban")){
 				//Permissions
 				if (args.length < 1){
-					sender.sendMessage("/ts3 ban {clientname} (reason)");
+					sender.sendMessage("/ts ban {clientname} (reason)");
 					return true;
 				}				
 				String name = args[1].toLowerCase();
@@ -160,12 +160,12 @@ public class Commands implements CommandExecutor {
 			if(args[0].equalsIgnoreCase("kick")){
 				//Permissions
 				if (args.length < 1){
-					sender.sendMessage("/ts3 kick {clientname} (reason)");
+					sender.sendMessage("/ts kick {clientname} (reason)");
 					return true;
 				}				
 				String name = args[1].toLowerCase();
 				//Verify
-					String kickReason = "not sure";
+				String kickReason = "not sure";
 					if(args.length > 3){
 						kickReason = combineSplit(2, args, " ");						
 					}
@@ -177,27 +177,46 @@ public class Commands implements CommandExecutor {
 					}
 				
 			}
+			if(args[0].equalsIgnoreCase("poke")){
+				//Permissions
+				if (args.length < 1){
+					sender.sendMessage("/ts poke {clientname} (message)");
+					return true;
+				}				
+				String name = args[1].toLowerCase();
+				//Verify
+					String message = "Hey Wake Up!";
+					if(args.length > 3){
+						message = combineSplit(2, args, " ");						
+					}
+					int clientID = Integer.parseInt(plugin.dquery.clientFindID(name));
+					if (plugin.dquery.poke(name, message)){
+						sender.sendMessage(ChatColor.AQUA + name + ChatColor.DARK_AQUA + " was poked in TeamSpeak");
+						return true;
+					}
+				
+			}
 			if(args[0].equalsIgnoreCase("help")){
 				sender.sendMessage("[BukkitSpeak]");
-				sender.sendMessage("/ts3 list [clients/channels/logview/serverinfo/groups]");
-				sender.sendMessage("/ts3 ban {clientname} (reason)");
-				sender.sendMessage("/ts3 kick {clientname} (reason)");
-				sender.sendMessage("/ts3 channel {name}");
+				sender.sendMessage("/ts list [clients/channels/logview/serverinfo/groups]");
+				sender.sendMessage("/ts ban {clientname} (reason)");
+				sender.sendMessage("/ts kick {clientname} (reason)");
+				sender.sendMessage("/ts channel {name}");
 				sender.sendMessage("-Changes Channels");
-				sender.sendMessage("/ts3 group {groupid} {name}");
+				sender.sendMessage("/ts group {groupid} {name}");
 				sender.sendMessage("-Changes Group");
-				sender.sendMessage("/ts3 reload");
+				sender.sendMessage("/ts reload");
 				//Display Commands permissions
 				
 			}
 			if(args[0].equalsIgnoreCase("group")){
 				//Change player group
 				if (args.length < 1){
-					sender.sendMessage("/ts3 group {groupid} {name}");
+					sender.sendMessage("/ts group {groupid} {name}");
 					return true;
 				}
 				if (args.length > 3){
-					sender.sendMessage("/ts3 group {groupid} {name}");
+					sender.sendMessage("/ts group {groupid} {name}");
 					return true;					
 				}
 				String groupId = args[1];
@@ -216,7 +235,7 @@ public class Commands implements CommandExecutor {
 			/*
 			if(args[0].equalsIgnoreCase("name")){
 				if (args.length < 1){
-					sender.sendMessage("/ts3 name {display}");
+					sender.sendMessage("/ts name {display}");
 					return true;
 				}
 				
@@ -224,7 +243,7 @@ public class Commands implements CommandExecutor {
 			*/
 			if(args[0].equalsIgnoreCase("channel")){
 				if(args.length < 1){
-					sender.sendMessage("/ts3 channel {name}");
+					sender.sendMessage("/ts channel {name}");
 					return true;
 				}
 				String name = combineSplit(1, args, " ");
@@ -234,7 +253,7 @@ public class Commands implements CommandExecutor {
 			}
 			if(args[0].equalsIgnoreCase("reload")){
 				if (args.length < 1){
-					sender.sendMessage("/ts3 reload");
+					sender.sendMessage("/ts reload");
 				}
 				if(plugin.query.removeAllEvents()){
 				}
@@ -243,6 +262,7 @@ public class Commands implements CommandExecutor {
 				plugin.getServer().getPluginManager().disablePlugin(plugin);
 				plugin.getServer().getPluginManager().enablePlugin(plugin);
 				sender.sendMessage("BukkitSpeak Reloaded");
+				return true;
 			}
 		}
 		return false;

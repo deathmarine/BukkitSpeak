@@ -50,10 +50,21 @@ public class TSListener implements TeamspeakActionListener{
 				if (plugin.query.sendTextMessage(JTS3ServerQuery.EVENT_MODE_TEXTSERVER, JTS3ServerQuery.TEXTMESSAGE_TARGET_GLOBAL, "BukkitSpeak Reloaded")){
 		        	
 		        }
+				return;
 			}
 			String name = eventInfo.remove("invokername");
 			//Setup for custom format.
-			plugin.getServer().broadcastMessage(ChatColor.GOLD + "[TS3][" + name + "]: " + msg);
+
+			String tname = eventInfo.remove("client_nickname");
+			if(eventType.equalsIgnoreCase("notifycliententerview")){
+				name = tname;
+	      	 	msg = " Joined Teamspeak.";
+			}
+			if(eventType.equalsIgnoreCase("notifyclientleftview")){
+				name = tname;
+	      	 	msg = " Left Teamspeak.";
+			}
+			plugin.getServer().broadcastMessage(ChatColor.BLUE + "[TS3]" + ChatColor.GRAY + "[" + name + "]: " + msg);
 	}
 	void outputHashMap(HashMap<String, String> hm)
 	{

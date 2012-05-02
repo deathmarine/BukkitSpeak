@@ -7,5 +7,7 @@ ts:
         groups:
     ban:
     kick:
+    poke:
     help:
     group:
+    reload:

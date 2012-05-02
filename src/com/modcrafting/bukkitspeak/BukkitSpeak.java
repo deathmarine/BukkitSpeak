@@ -64,7 +64,6 @@ public class BukkitSpeak extends JavaPlugin{
 	}
 
 	public void onDisable() {
-		keepalive.kill();
 		loggedPlayers.clear();
 		query.removeTeamspeakActionListener();
 		query.closeTS3Connection();
@@ -123,7 +122,7 @@ public class BukkitSpeak extends JavaPlugin{
 			log.log(Level.INFO, "[" + pdfFile.getName() + "]" + " Nickname changed to " + displayName + "!");
 		}
 		//Enable the Keep Alive
-		(new Thread(this.keepalive)).start();
+		getServer().getScheduler().scheduleAsyncRepeatingTask(this, this.keepalive, 300, 300);
 	}
 	void echoError(){
 		String error = query.getLastError();

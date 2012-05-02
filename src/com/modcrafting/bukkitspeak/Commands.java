@@ -75,7 +75,7 @@ public class Commands implements CommandExecutor {
 							tsclient = hashMap.remove("client_nickname");
 							tsclient = tsclient.replace(" from ", " ip: ");
 							tsclient = tsclient.replace(admin, "BukkitSpeak");
-							sender.sendMessage("[TS3] " + tsclient);
+							sender.sendMessage(ChatColor.GRAY + "[TS3] " + tsclient);
 						}
 					}else{
 						echoError(player);
@@ -88,7 +88,7 @@ public class Commands implements CommandExecutor {
 						String tschannel = null;
 						for (HashMap<String, String> hashMap : dataChannelList){
 							tschannel = hashMap.remove("channel_name");
-							sender.sendMessage("[TS3] " + tschannel);
+							sender.sendMessage(ChatColor.GRAY + "[TS3] " + tschannel);
 						}
 					}else{
 					echoError(player);
@@ -101,7 +101,7 @@ public class Commands implements CommandExecutor {
 						String tslog = null;
 						for (HashMap<String, String> hashMap : dataLogList){
 							tslog = hashMap.remove("l");
-							sender.sendMessage("[TS3] " + tslog);
+							sender.sendMessage(ChatColor.GRAY + "[TS3] " + tslog);
 						}
 					}
 				}
@@ -131,7 +131,7 @@ public class Commands implements CommandExecutor {
 							//outputHashMap(hashMap, player);
 							name = hashMap.remove("name");
 							id = hashMap.remove("sgid");
-							sender.sendMessage("[TS3]" + id + ": " + name);
+							sender.sendMessage(ChatColor.GRAY + "[TS3]" + id + ": " + name);
 						}
 					}else{
 					echoError(player);
@@ -142,7 +142,7 @@ public class Commands implements CommandExecutor {
 			if(args[0].equalsIgnoreCase("ban")){
 				//Permissions
 				if (args.length < 1){
-					sender.sendMessage("/ts ban {clientname} (reason)");
+					sender.sendMessage(ChatColor.GRAY + "/ts ban {clientname} (reason)");
 					return true;
 				}				
 				String name = args[1].toLowerCase();
@@ -153,7 +153,7 @@ public class Commands implements CommandExecutor {
 					}
 					String newname = plugin.dquery.clientFind(name);
 					if (plugin.dquery.banClient(name, banReason)){
-						sender.sendMessage("[BukkitSpeak]" + newname + " was banned from TeamSpeak for " + banReason);
+						sender.sendMessage(ChatColor.GRAY + "[BukkitSpeak]" + newname + " was banned from TeamSpeak for " + banReason);
 						return true;
 					}
 				
@@ -161,7 +161,7 @@ public class Commands implements CommandExecutor {
 			if(args[0].equalsIgnoreCase("kick")){
 				//Permissions
 				if (args.length < 1){
-					sender.sendMessage("/ts kick {clientname} (reason)");
+					sender.sendMessage(ChatColor.GRAY + "/ts kick {clientname} (reason)");
 					return true;
 				}				
 				String name = args[1].toLowerCase();
@@ -173,7 +173,7 @@ public class Commands implements CommandExecutor {
 					String newname = plugin.dquery.clientFind(name);
 					int clientID = Integer.parseInt(plugin.dquery.clientFindID(name));
 					if (plugin.query.kickClient(clientID, false, kickReason)){
-						sender.sendMessage("[BukkitSpeak]" + newname + " was kicked from TeamSpeak for " + kickReason);
+						sender.sendMessage(ChatColor.GRAY + "[BukkitSpeak]" + newname + " was kicked from TeamSpeak for " + kickReason);
 						return true;
 					}
 				
@@ -181,7 +181,7 @@ public class Commands implements CommandExecutor {
 			if(args[0].equalsIgnoreCase("poke")){
 				//Permissions
 				if (args.length < 1){
-					sender.sendMessage("/ts poke {clientname} (message)");
+					sender.sendMessage(ChatColor.GRAY + "/ts poke {clientname} (message)");
 					return true;
 				}				
 				String name = args[1].toLowerCase();
@@ -214,7 +214,7 @@ public class Commands implements CommandExecutor {
 			if(args[0].equalsIgnoreCase("group")){
 				//Change player group
 				if (args.length < 1){
-					sender.sendMessage("/ts group {groupid} {name}");
+					sender.sendMessage(ChatColor.GRAY + "/ts group {groupid} {name}");
 					return true;
 				}
 				String groupId = args[1];
@@ -222,18 +222,18 @@ public class Commands implements CommandExecutor {
 				
 				String clid = plugin.dquery.clientFind(plugin.query.encodeTS3String(name));
 				if (plugin.dquery.changeGroup(groupId, clid)){
-					sender.sendMessage("Changed Client: " + name + " to Group: " + groupId + "!");
+					sender.sendMessage(ChatColor.GRAY + "Changed Client: " + name + " to Group: " + groupId + "!");
 					return true;
 				}else{
-					sender.sendMessage("Unable to move Client: " + name + " to Group: " + groupId + "!");
-					sender.sendMessage("Check the name, spelling and id!");
+					sender.sendMessage(ChatColor.GRAY + "Unable to move Client: " + name + " to Group: " + groupId + "!");
+					sender.sendMessage(ChatColor.GRAY + "Check the name, spelling and id!");
 					return true;
 				}
 			}
 			/*
 			if(args[0].equalsIgnoreCase("name")){
 				if (args.length < 1){
-					sender.sendMessage("/ts name {display}");
+					sender.sendMessage(ChatColor.GREY + "/ts name {display}");
 					return true;
 				}
 				
@@ -241,7 +241,7 @@ public class Commands implements CommandExecutor {
 			*/
 			if(args[0].equalsIgnoreCase("channel")){
 				if(args.length < 1){
-					sender.sendMessage("/ts channel {name}");
+					sender.sendMessage(ChatColor.GRAY + "/ts channel {name}");
 					return true;
 				}
 				String name = combineSplit(1, args, " ");
@@ -251,7 +251,7 @@ public class Commands implements CommandExecutor {
 			}
 			if(args[0].equalsIgnoreCase("reload")){
 				if (args.length < 1){
-					sender.sendMessage("/ts reload");
+					sender.sendMessage(ChatColor.GRAY + "/ts reload");
 				}
 				if(plugin.query.removeAllEvents()){
 				}

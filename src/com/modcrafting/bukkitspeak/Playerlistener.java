@@ -15,7 +15,7 @@ public class Playerlistener implements Listener{
 	public Playerlistener(BukkitSpeak bukkitspeak){
 		this.plugin = bukkitspeak;
 	}
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChat(PlayerChatEvent event){
 	        if(event.isCancelled()) return;
 	        if(!plugin.query.isConnected()) return;
@@ -30,7 +30,7 @@ public class Playerlistener implements Listener{
 	        //format.replaceAll("%Message%", msg);
 	        if (plugin.query.sendTextMessage(JTS3ServerQuery.EVENT_MODE_TEXTSERVER, plugin.channel, format)) return;
 	}
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoin(PlayerJoinEvent event){
 			if(!plugin.query.isConnected()) plugin.reconnect();
 			YamlConfiguration config = (YamlConfiguration) plugin.getConfig();
@@ -44,7 +44,7 @@ public class Playerlistener implements Listener{
 	        //format.replaceAll("%Message%", msg);
 	        if (plugin.query.sendTextMessage(JTS3ServerQuery.EVENT_MODE_TEXTSERVER, plugin.channel, format)) return;
 	}
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerQuit(PlayerQuitEvent event){
 			if(!plugin.query.isConnected()) plugin.reconnect();
 			YamlConfiguration config = (YamlConfiguration) plugin.getConfig();

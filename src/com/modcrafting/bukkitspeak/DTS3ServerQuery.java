@@ -160,7 +160,7 @@ public class DTS3ServerQuery{
 	}
 	public boolean poke(String player, String message){
 		if (!plugin.query.isConnected()){
-			log.log(Level.INFO, "channelFind(): Not connected to TS3 server!");
+			log.log(Level.INFO, "poke(): Not connected to TS3 server!");
 			return false;
 		}
 		//clientpoke clid=5 msg=Wake\sup!

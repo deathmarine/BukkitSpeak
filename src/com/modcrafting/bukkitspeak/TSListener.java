@@ -21,6 +21,25 @@ public class TSListener implements TeamspeakActionListener{
 
 	@Override
 	public void teamspeakActionPerformed(String eventType, HashMap<String, String> eventInfo) {
+
+		if(eventType.equalsIgnoreCase("notifycliententerview")||eventType.equalsIgnoreCase("notifyclientleftview")){
+			String msg = null;
+			//Setup for custom format.
+
+
+			String name = eventInfo.remove("client_nickname");
+			if(eventType.equalsIgnoreCase("notifycliententerview")){
+	      	 	msg = " Joined Teamspeak.";
+			}	
+			/*
+			if(eventType.equalsIgnoreCase("notifyclientleftview")){
+	      	 	msg = " Left Teamspeak.";
+				name = plugin.dquery.clientFindName(eventInfo.remove("clid").trim());
+			}
+			*/
+			if(!name.contains("Unknown from"))
+			plugin.getServer().broadcastMessage(ChatColor.BLUE + "[TS3]" + ChatColor.GRAY + "[" + name + "]: " + msg);
+		}
 			String msg = eventInfo.remove("msg");
 			YamlConfiguration config = (YamlConfiguration) plugin.getConfig();
 			String sname = config.getString("DisplayName", "MC");
@@ -52,19 +71,6 @@ public class TSListener implements TeamspeakActionListener{
 		        }
 				return;
 			}
-			String name = eventInfo.remove("invokername");
-			//Setup for custom format.
-
-			String tname = eventInfo.remove("client_nickname");
-			if(eventType.equalsIgnoreCase("notifycliententerview")){
-				name = tname;
-	      	 	msg = " Joined Teamspeak.";
-			}
-			if(eventType.equalsIgnoreCase("notifyclientleftview")){
-				name = tname;
-	      	 	msg = " Left Teamspeak.";
-			}
-			plugin.getServer().broadcastMessage(ChatColor.BLUE + "[TS3]" + ChatColor.GRAY + "[" + name + "]: " + msg);
 	}
 	void outputHashMap(HashMap<String, String> hm)
 	{

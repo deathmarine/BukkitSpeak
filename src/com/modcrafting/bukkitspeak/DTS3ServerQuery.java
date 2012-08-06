@@ -131,6 +131,34 @@ public class DTS3ServerQuery{
 		return clientname;
 		
 	}
+
+	public String clientFindName(String id){
+		if (!plugin.query.isConnected()){
+			log.log(Level.INFO, "clientfind(): Not connected to TS3 server!");
+			return null;
+		}
+
+		HashMap<String, String> hmIn;
+		try{
+			String command = "clientinfo";					
+			if (id != null && id.length() > 0){
+			command += " clid=" + id;
+			}
+			
+			hmIn = plugin.query.doCommand(command);
+			HashMap<String, String> info = parseLine(hmIn.get("response"));
+			if (!hmIn.get("msg").equalsIgnoreCase("ok")){
+				log.log(Level.INFO, "clientfind()" + hmIn.get("id") + hmIn.get("msg") + hmIn.get("extra_msg") + hmIn.get("failed_permid"));
+				return null;
+			}
+			id = info.remove("client_nickname");
+		}catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
+		return id;
+		
+	}
 	public String channelFind(String channelname){
 		if (!plugin.query.isConnected()){
 			log.log(Level.INFO, "channelFind(): Not connected to TS3 server!");

@@ -115,7 +115,10 @@ public class BukkitSpeak extends JavaPlugin{
 			echoError();
 			return;
 		}
-		
+		if (!query.addEventNotify(JTS3ServerQuery.EVENT_MODE_SERVER, 0)){
+			echoError();
+			return;
+		}
 		log.log(Level.INFO, "[" + pdfFile.getName() + "]" + " is enabled!");
 		String displayName = config.getString("DisplayName", "MC");
 		if (query.setDisplayName(displayName)){
